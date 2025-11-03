@@ -1,6 +1,6 @@
-# BRVM - Brainrot v3 Virtual Machine
+# BRVM - Brainrot Virtual Machine
 
-A compiler and virtual machine for the Brainrot v3 programming language, written in Rust.
+A compiler and virtual machine for the Brainrot programming language, written in Rust.
 
 ## Installation
 
@@ -118,10 +118,7 @@ ITS OVER
 
 ## License
 
-Licensed under either of
-
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+Licensed under MIT license
 
 at your option.
 
