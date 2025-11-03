@@ -217,14 +217,14 @@ ITS OVER
 
 The interpreter provides several built-in functions for system operations and file I/O:
 
-| Normal name | Brainrot identifier (what you'll use in code) | Example call (Brainrot syntax) |
-|------------|----------------------------------------------|--------------------------------|
-| `module.load` | `fanum.tax` | `fanum.tax "compiler.br"` → returns a module table or the exported function set |
-| `file-read all` | `edge.mewing` | `edge.mewing "src/brainrot_compiler.br"` → string |
-| `file-write all` | `edge.looksmaxxing` | `edge.looksmaxxing "build/main.br", compiled_source` |
-| `system.exit` | `goated.yeet` | `goated.yeet 0` |
-| `system.args` | `goated.67` | `goated.67` → list of command-line arguments |
-| `system.env` | `goated.bussin` | `goated.bussin "PATH"` → value of the PATH env variable (or empty string) |
+| Identifier | Example call |
+|----------------------------------------------|--------------------------------|
+| `fanum.tax` | `fanum.tax "compiler.br"` → returns a module table or the exported function set |
+| `edge.mewing` | `edge.mewing "src/brainrot_compiler.br"` → string |
+| `edge.looksmaxxing` | `edge.looksmaxxing "build/main.br", compiled_source` |
+| `goated.yeet` | `goated.yeet 0` |
+| `goated.67` | `goated.67` → list of command-line arguments |
+| `goated.bussin` | `goated.bussin "PATH"` → value of the PATH env variable (or empty string) |
 
 **How the VM sees them**
 
