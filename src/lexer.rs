@@ -17,6 +17,15 @@ pub enum Token {
     Deadass, // end if
     Skibidi, // while
     Rizzup,  // end while
+    Tralalero, // function def start
+    Tralala,   // function def end
+    Retreat,   // return
+    Ring,      // call keyword part 1
+    Yas,       // call keyword part 2
+    Diddle,    // copy statement
+    Youshallnotpass, // halt
+    Comma,     // parameter separator
+    Identifier(String), // for function names and local variables
     
     // Operators
     Add,      // 💀
@@ -135,6 +144,10 @@ impl<'a> Lexer<'a> {
         if ch == ')' {
             self.advance();
             return Ok(Token::RParen);
+        }
+        if ch == ',' {
+            self.advance();
+            return Ok(Token::Comma);
         }
         
         // Number
@@ -268,6 +281,13 @@ impl<'a> Lexer<'a> {
             "DEADASS" => return Ok(Token::Deadass),
             "SKIBIDI" => return Ok(Token::Skibidi),
             "RIZZUP" => return Ok(Token::Rizzup),
+            "TRALALERO" => return Ok(Token::Tralalero),
+            "TRALALA" => return Ok(Token::Tralala),
+            "RETREAT" => return Ok(Token::Retreat),
+            "ring" => return Ok(Token::Ring),
+            "yas" => return Ok(Token::Yas),
+            "DIDDLE" => return Ok(Token::Diddle),
+            "YOUSHALLNOTPASS" => return Ok(Token::Youshallnotpass),
             _ => {}
         }
         
@@ -278,12 +298,8 @@ impl<'a> Lexer<'a> {
             }
         }
         
-        Err(CompileError::new(
-            self.filename,
-            self.line,
-            self.col,
-            &format!("unknown identifier: {}", ident),
-        ))
+        // Otherwise, it's an identifier (function name or local variable)
+        Ok(Token::Identifier(ident))
     }
     
     fn skip_whitespace(&mut self) {

@@ -1,0 +1,35 @@
+LOCK IN
+SAY "=== Brainrot v3 Vibe Hub ==="
+
+🖕 greet (if/else on empty vs non-empty)
+FANUMTAX aura FR TOUCHY("name (empty = anon): ")
+ONGOD aura
+  SAY "wsg " 💀 aura 💀 "!"
+NO CAP
+  SAY "wsg, mysterious sigma."
+DEADASS
+
+🖕 quick math demo: (10 * 2) + 5 = 25
+FANUMTAX sigma FR 10 😏 2 💀 5
+SAY "math result: " 💀 sigma
+
+🖕 countdown with while loop
+FANUMTAX gyatt FR 3
+SKIBIDI gyatt
+  SAY gyatt
+  FANUMTAX gyatt FR gyatt 😭 1
+RIZZUP
+
+🖕 echo loop: type lines; blank line exits
+FANUMTAX mog FR 1        🖕 control flag: 1=true, 0=false
+SKIBIDI mog
+  FANUMTAX goon FR TOUCHY("say something (blank=exit): ")
+  ONGOD goon
+    SAY "you said: " 💀 goon
+  NO CAP
+    FANUMTAX mog FR 0    🖕 set flag false -> exit loop
+  DEADASS
+RIZZUP
+
+SAY "=== bye ==="
+ITS OVER

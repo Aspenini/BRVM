@@ -1,0 +1,75 @@
+TRALALERO fanum_greet(name)
+  🖕 local shadowing demo (aura here is local)
+  FANUMTAX aura FR "wsg " 💀 name
+  RETREAT aura
+TRALALA
+
+TRALALERO rizzadd(a, b)
+  FANUMTAX sigma FR a 💀 b
+  RETREAT sigma
+TRALALA
+
+TRALALERO rizzmul(a, b)
+  FANUMTAX sigma FR a 😏 b
+  RETREAT sigma
+TRALALA
+
+TRALALERO gyattfact(n)
+  🖕 if (n-1) truthy → recurse; else return 1
+  ONGOD n 😭 1
+    RETREAT n 😏 ring yas gyattfact(n 😭 1)
+  NO CAP
+    RETREAT 1
+  DEADASS
+TRALALA
+
+TRALALERO echo_times(msg, times)
+  FANUMTAX npc FR times           🖕 local counter
+  SKIBIDI npc
+    SAY msg
+    FANUMTAX npc FR npc 😭 1
+  RIZZUP
+  RETREAT ""                      🖕 default / not used
+TRALALA
+
+LOCK IN
+SAY "=== Brainrot v4 Showcase ==="
+
+🖕 globals exist before function calls
+FANUMTAX aura FR "GLOBAL_AURA"
+
+🖕 1) greet with name length using RIZZED
+FANUMTAX goon FR TOUCHY("name (blank = anon): ")
+ONGOD goon
+  FANUMTAX mog FR RIZZED(goon)
+  SAY "len(name): " 💀 mog
+  SAY ring yas fanum_greet(goon)
+NO CAP
+  SAY "wsg, mysterious sigma."
+DEADASS
+
+🖕 2) simple calculator (add and multiply) with TRANSFORM + DIDDLE
+SAY "enter a:"
+FANUMTAX aura FR TOUCHY()
+SAY "enter b:"
+FANUMTAX peak FR TOUCHY()
+DIDDLE gyatt FR aura                 🖕 copy string of a (demo DIDDLE)
+FANUMTAX sigma FR TRANSFORM(gyatt)   🖕 parse a
+FANUMTAX npc   FR TRANSFORM(peak)    🖕 parse b
+SAY "sum: " 💀 ring yas rizzadd(sigma, npc)
+SAY "prod: " 💀 ring yas rizzmul(sigma, npc)
+
+🖕 3) factorial with recursion
+SAY "n for factorial:"
+FANUMTAX goon FR TRANSFORM(TOUCHY())
+SAY "fact: " 💀 ring yas gyattfact(goon)
+
+🖕 4) echo N times using while loop inside function
+SAY "what to echo:"
+FANUMTAX mog FR TOUCHY()
+SAY "how many times:"
+FANUMTAX sigma FR TRANSFORM(TOUCHY())
+SAY ring yas echo_times(mog, sigma)
+
+SAY "=== done ==="
+ITS OVER

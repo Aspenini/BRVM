@@ -9,7 +9,7 @@ use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
 #[command(name = "brvm")]
-#[command(about = "Brainrot v3 Compiler and Virtual Machine")]
+#[command(about = "Brainrot v4 Compiler and Virtual Machine")]
 #[command(version = env!("CARGO_PKG_VERSION"))]
 struct Cli {
     #[command(subcommand)]

@@ -1,0 +1,22 @@
+LOCK IN
+🖕 basic hello
+SAY "wsg WORLD!"
+
+🖕 math: (10 * 2) + 5 = 25
+FANUMTAX sigma FR 10 😏 2 💀 5
+SAY sigma
+
+🖕 concat with space
+FANUMTAX aura FR "wsg"
+FANUMTAX goon FR "WORLD!"
+SAY aura 💀 " " 💀 goon
+
+🖕 precedence check: 8 + (6 / 3) * 4 = 8 + 2 * 4 = 16
+FANUMTAX npc FR 8 💀 6 🚡 3 😏 4
+SAY npc
+
+🖕 numeric ops only (no string repeat in v1)
+FANUMTAX peak FR 7 😭 2
+SAY peak
+
+ITS OVER

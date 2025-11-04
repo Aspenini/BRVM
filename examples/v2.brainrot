@@ -1,0 +1,32 @@
+LOCK IN
+SAY "=== Brainrot v2 smoke ==="
+
+🖕 math: (10 * 2) + 5 = 25
+FANUMTAX sigma FR 10 😏 2 💀 5
+SAY sigma
+
+🖕 precedence: 8 + (6 / 3) * 4 = 16
+FANUMTAX npc FR 8 💀 6 🚡 3 😏 4
+SAY npc
+
+🖕 subtraction chain: 25 - 3 = 22
+FANUMTAX sigma FR sigma 😭 3
+SAY sigma
+
+🖕 concat using two cells
+FANUMTAX aura FR "wsg"
+FANUMTAX goon FR "WORLD!"
+FANUMTAX mog FR aura 💀 " " 💀 goon
+SAY mog
+
+🖕 TOUCHY with prompt
+FANUMTAX peak FR TOUCHY("name: ")
+SAY "hi " 💀 peak 💀 "!"
+
+🖕 TOUCHY without prompt (use previous SAY as prompt)
+SAY "favorite snack?"
+FANUMTAX gyatt FR TOUCHY()
+SAY "snack: " 💀 gyatt
+
+SAY "=== done ==="
+ITS OVER
