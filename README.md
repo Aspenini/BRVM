@@ -1,128 +1,94 @@
-# BRVM - Brainrot Virtual Machine
+# BRVM
 
-A compiler and virtual machine for the Brainrot programming language, written in Rust.
+BRVM is the Rust implementation of Brainrot Lang. It currently provides a source-to-bytecode compiler and a stack-based bytecode interpreter for `.brainrot` programs.
 
-## Installation
+The current backend is BRBC bytecode. There is no native or AOT backend in the tree today; the LLVM AOT path is documented as a planned backend rather than a partial implementation.
 
-```bash
-cargo install brvm
-```
-
-Or install from source:
+## Quick Start
 
 ```bash
-git clone https://github.com/yourusername/brvm.git
-cd brvm
 cargo build --release
 ```
 
-## Usage
-
-### Compiling Brainrot code
+Compile a source file to BRBC bytecode:
 
 ```bash
-brvm compile input.brainrot -o output.brbc
+brvm compile examples/v1.brainrot -o examples/v1.brbc
 ```
 
-If no output is specified, it defaults to `input.brbc` in the same directory.
-
-### Running bytecode
+Run bytecode:
 
 ```bash
-brvm exec output.brbc
+brvm exec examples/v1.brbc
 ```
 
-## Language Features (v3)
+During development, the same commands can be run through Cargo:
 
-### Braincells
+```bash
+cargo run -- compile examples/v1.brainrot -o /tmp/v1.brbc
+cargo run -- exec /tmp/v1.brbc
+```
 
-Seven global variables: `aura`, `peak`, `goon`, `mog`, `npc`, `sigma`, `gyatt`
+## Brainrot Lang
 
-### Statements
-
-- `FANUMTAX <cell> FR <expr>` - Assign a value to a braincell
-- `SAY <expr>` - Print a value with newline
-- `ONGOD <expr> ... DEADASS` - If statement
-- `ONGOD <expr> ... NO CAP ... DEADASS` - If/else statement
-- `SKIBIDI <expr> ... RIZZUP` - While loop
-
-### Expressions
-
-- Numbers (f64): `42`, `3.14`
-- Strings: `"hello"`, `"wsg WORLD!"`
-- Variables: braincell names
-- Binary operators:
-  - `💀` - Addition / String concatenation
-  - `😭` - Subtraction
-  - `😏` - Multiplication
-  - `🚡` - Division
-- Function calls:
-  - `TOUCHY()` - Read input from stdin
-  - `TOUCHY("prompt: ")` - Print prompt and read input
-
-### Examples
-
-#### Hello World
+A minimal program starts with `LOCK IN` and ends with `ITS OVER`.
 
 ```brainrot
 LOCK IN
-SAY "wsg WORLD!"
+FANUMTAX aura FR "wsg"
+FANUMTAX goon FR "WORLD!"
+SAY aura 💀 " " 💀 goon
 ITS OVER
 ```
 
-#### If/Else
+Core features:
 
-```brainrot
-LOCK IN
-FANUMTAX sigma FR 0
-ONGOD sigma
-  SAY "nonzero"
-NO CAP
-  SAY "zero"
-DEADASS
-ITS OVER
+- Seven global braincells: `aura`, `peak`, `goon`, `mog`, `npc`, `sigma`, `gyatt`
+- Numbers, strings, string concatenation, string repeat, arithmetic, and truthiness
+- `FANUMTAX`, `DIDDLE`, `SAY`, `TOUCHY`, `ONGOD`, `NO CAP`, `SKIBIDI`, and `RETREAT`
+- User functions with `TRALALERO ... TRALALA`
+- Built-ins: `TOUCHY`, `TRANSFORM`, and `RIZZED`
+
+See [Brainrot-Lang.md](Brainrot-Lang.md) for the language reference.
+
+## BRVM Architecture
+
+The runtime pipeline is:
+
+```text
+.brainrot source
+  -> lexer
+  -> parser AST
+  -> BRBC bytecode compiler
+  -> BRVM stack interpreter
 ```
 
-#### While Loop
+Important implementation files:
 
-```brainrot
-LOCK IN
-FANUMTAX gyatt FR 3
-SKIBIDI gyatt
-  SAY gyatt
-  FANUMTAX gyatt FR gyatt 😭 1
-RIZZUP
-ITS OVER
+- [src/lexer.rs](src/lexer.rs): tokenizes source, including emoji operators and comments
+- [src/parser.rs](src/parser.rs): builds the AST for programs, statements, expressions, and functions
+- [src/compiler.rs](src/compiler.rs): emits BRBC v4 bytecode
+- [src/vm.rs](src/vm.rs): validates and executes bytecode
+- [src/value.rs](src/value.rs): runtime value operations
+
+See [docs/brvm.md](docs/brvm.md) for the bytecode/interpreter design and [docs/roadmap.md](docs/roadmap.md) for planned interpreter, LLVM AOT, and JIT work.
+
+## Development
+
+Run the test suite:
+
+```bash
+cargo test
 ```
 
-Output: `3\n2\n1`
+Format code:
 
-#### Interactive Input
-
-```brainrot
-LOCK IN
-FANUMTAX aura FR TOUCHY("name: ")
-ONGOD aura
-  SAY "hi " 💀 aura
-NO CAP
-  SAY "no name provided"
-DEADASS
-ITS OVER
+```bash
+cargo fmt
 ```
 
-## Truthiness
-
-- `Number(0.0)` → false
-- `String("")` → false
-- Everything else → true
+The integration tests compile the bundled examples and exercise VM behavior such as prompt input, function calls, recursion, and string repeat.
 
 ## License
 
-Licensed under MIT license
-
-at your option.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
-
+Licensed under the MIT license.

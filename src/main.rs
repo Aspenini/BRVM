@@ -1,10 +1,4 @@
-mod lexer;
-mod parser;
-mod compiler;
-mod vm;
-mod value;
-mod error;
-
+use brvm::{compiler, error, lexer, parser, vm};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -30,19 +24,24 @@ enum Commands {
 
 fn main() {
     let cli = Cli::parse();
-    
+
     match cli.command {
         Commands::Compile { input, output } => {
             let output = output.unwrap_or_else(|| {
                 // If no output specified, use same directory with .brbc extension
-                let parent = std::path::Path::new(&input).parent().unwrap_or(std::path::Path::new("."));
+                let parent = std::path::Path::new(&input)
+                    .parent()
+                    .unwrap_or(std::path::Path::new("."));
                 let stem = std::path::Path::new(&input)
                     .file_stem()
                     .and_then(|s| s.to_str())
                     .unwrap_or("output");
-                parent.join(format!("{}.brbc", stem)).to_string_lossy().to_string()
+                parent
+                    .join(format!("{}.brbc", stem))
+                    .to_string_lossy()
+                    .to_string()
             });
-            
+
             if let Err(e) = compile_file(&input, &output) {
                 eprintln!("{}", e);
                 std::process::exit(1);
@@ -60,24 +59,22 @@ fn main() {
 fn compile_file(input: &str, output: &str) -> Result<(), Box<dyn std::error::Error>> {
     let source = std::fs::read_to_string(input)
         .map_err(|_| error::CompileError::new(input, 0, 0, "failed to read file"))?;
-    
+
     let tokens = lexer::tokenize(&source, input)?;
     let ast = parser::parse(tokens, input)?;
-    let bytecode = compiler::compile(ast)
-        .map_err(|e| error::CompileError::new(input, 0, 0, &e))?;
-    
+    let bytecode = compiler::compile(ast).map_err(|e| error::CompileError::new(input, 0, 0, &e))?;
+
     std::fs::write(output, bytecode)
         .map_err(|_| error::CompileError::new(output, 0, 0, "failed to write bytecode"))?;
-    
+
     Ok(())
 }
 
 fn execute_file(input: &str) -> Result<(), vm::RuntimeError> {
-    let bytecode = std::fs::read(input)
-        .map_err(|_| vm::RuntimeError::new("failed to read bytecode file"))?;
-    
+    let bytecode =
+        std::fs::read(input).map_err(|_| vm::RuntimeError::new("failed to read bytecode file"))?;
+
     vm::execute(&bytecode)?;
-    
+
     Ok(())
 }
-

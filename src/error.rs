@@ -19,9 +19,12 @@ impl CompileError {
 
 impl std::fmt::Display for CompileError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}:{}:{}: {}", self.filename, self.line, self.col, self.message)
+        write!(
+            f,
+            "{}:{}:{}: {}",
+            self.filename, self.line, self.col, self.message
+        )
     }
 }
 
 impl std::error::Error for CompileError {}
-

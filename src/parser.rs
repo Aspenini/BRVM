@@ -1,5 +1,5 @@
-use crate::lexer::Token;
 use crate::error::CompileError;
+use crate::lexer::Token;
 
 #[derive(Debug, Clone)]
 pub enum Expr {
@@ -32,7 +32,10 @@ pub enum BinaryOp {
 #[derive(Debug, Clone)]
 pub enum Statement {
     Assign(String, Expr), // variable name, expression
-    Copy { dest: String, source: Expr }, // DIDDLE
+    Copy {
+        dest: String,
+        source: Expr,
+    }, // DIDDLE
     Print(Expr),
     If {
         condition: Expr,
@@ -44,7 +47,7 @@ pub enum Statement {
         body: Vec<Statement>,
     },
     Return(Expr), // RETREAT
-    Halt, // YOUSHALLNOTPASS
+    Halt,         // YOUSHALLNOTPASS
 }
 
 #[derive(Debug, Clone)]
@@ -79,14 +82,14 @@ impl<'a> Parser<'a> {
             filename,
         }
     }
-    
+
     fn parse_program(&mut self) -> Result<Program, CompileError> {
         // Parse functions before LOCK IN
         let mut functions = Vec::new();
         while self.consume(Token::Tralalero)? {
             functions.push(self.parse_function()?);
         }
-        
+
         // Must start with LOCK IN
         if !self.consume(Token::Lock)? || !self.consume(Token::In)? {
             return Err(CompileError::new(
@@ -96,13 +99,13 @@ impl<'a> Parser<'a> {
                 "program must start with LOCK IN",
             ));
         }
-        
+
         let mut statements = Vec::new();
-        
+
         while !self.check(&Token::Its) {
             statements.push(self.parse_statement()?);
         }
-        
+
         // Must end with ITS OVER
         if !self.consume(Token::Its)? || !self.consume(Token::Over)? {
             return Err(CompileError::new(
@@ -112,7 +115,7 @@ impl<'a> Parser<'a> {
                 "program must end with ITS OVER",
             ));
         }
-        
+
         if !self.check(&Token::Eof) {
             return Err(CompileError::new(
                 self.filename,
@@ -121,13 +124,13 @@ impl<'a> Parser<'a> {
                 "unexpected token after ITS OVER",
             ));
         }
-        
+
         Ok(Program {
             functions,
             main_statements: statements,
         })
     }
-    
+
     fn parse_function(&mut self) -> Result<Function, CompileError> {
         // TRALALERO <name>(<params>) ... TRALALA
         let name = match self.current_token().cloned() {
@@ -144,7 +147,7 @@ impl<'a> Parser<'a> {
                 ));
             }
         };
-        
+
         // Parse parameters
         if !self.consume(Token::LParen)? {
             return Err(CompileError::new(
@@ -154,7 +157,7 @@ impl<'a> Parser<'a> {
                 "expected '(' after function name",
             ));
         }
-        
+
         let mut params = Vec::new();
         if !matches!(self.current_token(), Some(Token::RParen)) {
             loop {
@@ -173,7 +176,7 @@ impl<'a> Parser<'a> {
                     }
                 };
                 params.push(param_name);
-                
+
                 if self.consume(Token::Comma)? {
                     continue;
                 }
@@ -190,16 +193,16 @@ impl<'a> Parser<'a> {
         } else {
             self.advance(); // consume RParen
         }
-        
+
         // Parse function body
         let mut body = Vec::new();
         while !self.consume(Token::Tralala)? {
             body.push(self.parse_statement()?);
         }
-        
+
         Ok(Function { name, params, body })
     }
-    
+
     fn parse_statement(&mut self) -> Result<Statement, CompileError> {
         if self.consume(Token::Fanumtax)? {
             // FANUMTAX <var> FR <expr>
@@ -222,7 +225,7 @@ impl<'a> Parser<'a> {
                     ));
                 }
             };
-            
+
             if !self.consume(Token::Fr)? {
                 return Err(CompileError::new(
                     self.filename,
@@ -231,7 +234,7 @@ impl<'a> Parser<'a> {
                     "expected FR after variable",
                 ));
             }
-            
+
             let expr = self.parse_expression()?;
             Ok(Statement::Assign(var_name, expr))
         } else if self.consume(Token::Diddle)? {
@@ -255,7 +258,7 @@ impl<'a> Parser<'a> {
                     ));
                 }
             };
-            
+
             if !self.consume(Token::Fr)? {
                 return Err(CompileError::new(
                     self.filename,
@@ -264,7 +267,7 @@ impl<'a> Parser<'a> {
                     "expected FR after variable",
                 ));
             }
-            
+
             let source = self.parse_expression()?;
             Ok(Statement::Copy { dest, source })
         } else if self.consume(Token::Say)? {
@@ -293,16 +296,16 @@ impl<'a> Parser<'a> {
             ))
         }
     }
-    
+
     fn parse_if(&mut self) -> Result<Statement, CompileError> {
         // ONGOD <expr> ... (NO CAP ...)? DEADASS
         let condition = self.parse_expression()?;
-        
+
         let mut then_block = Vec::new();
         while !matches!(self.current_token(), Some(Token::No | Token::Deadass)) {
             then_block.push(self.parse_statement()?);
         }
-        
+
         let else_block = if self.consume(Token::No)? {
             if !self.consume(Token::Cap)? {
                 return Err(CompileError::new(
@@ -312,7 +315,7 @@ impl<'a> Parser<'a> {
                     "expected CAP after NO",
                 ));
             }
-            
+
             let mut else_stmt = Vec::new();
             while !matches!(self.current_token(), Some(Token::Deadass)) {
                 else_stmt.push(self.parse_statement()?);
@@ -321,7 +324,7 @@ impl<'a> Parser<'a> {
         } else {
             None
         };
-        
+
         if !self.consume(Token::Deadass)? {
             return Err(CompileError::new(
                 self.filename,
@@ -330,23 +333,23 @@ impl<'a> Parser<'a> {
                 "expected DEADASS to close ONGOD block",
             ));
         }
-        
+
         Ok(Statement::If {
             condition,
             then_block,
             else_block,
         })
     }
-    
+
     fn parse_while(&mut self) -> Result<Statement, CompileError> {
         // SKIBIDI <expr> ... RIZZUP
         let condition = self.parse_expression()?;
-        
+
         let mut body = Vec::new();
         while !matches!(self.current_token(), Some(Token::Rizzup)) {
             body.push(self.parse_statement()?);
         }
-        
+
         if !self.consume(Token::Rizzup)? {
             return Err(CompileError::new(
                 self.filename,
@@ -355,30 +358,27 @@ impl<'a> Parser<'a> {
                 "expected RIZZUP to close SKIBIDI block",
             ));
         }
-        
-        Ok(Statement::While {
-            condition,
-            body,
-        })
+
+        Ok(Statement::While { condition, body })
     }
-    
+
     fn parse_expression(&mut self) -> Result<Expr, CompileError> {
         self.parse_binary_expression(0)
     }
-    
+
     fn parse_binary_expression(&mut self, min_precedence: u8) -> Result<Expr, CompileError> {
         let mut expr = self.parse_term()?;
-        
+
         loop {
             let op = self.current_binary_op();
             let Some((op, precedence)) = op else {
                 break;
             };
-            
+
             if precedence < min_precedence {
                 break;
             }
-            
+
             self.advance();
             let rhs = self.parse_binary_expression(precedence + 1)?;
             expr = Expr::Binary {
@@ -387,10 +387,10 @@ impl<'a> Parser<'a> {
                 right: Box::new(rhs),
             };
         }
-        
+
         Ok(expr)
     }
-    
+
     fn parse_term(&mut self) -> Result<Expr, CompileError> {
         let token = self.current_token().cloned();
         match token {
@@ -412,6 +412,8 @@ impl<'a> Parser<'a> {
                 // Check if it's a built-in function call
                 if name == "TRANSFORM" || name == "RIZZED" {
                     self.parse_function_call(&name)
+                } else if matches!(self.current_token(), Some(Token::LParen)) {
+                    self.parse_user_function_call(&name)
                 } else {
                     // It's a variable
                     Ok(Expr::Variable(name.clone()))
@@ -457,7 +459,7 @@ impl<'a> Parser<'a> {
             )),
         }
     }
-    
+
     fn parse_user_function_call(&mut self, name: &str) -> Result<Expr, CompileError> {
         // Parse (args...)
         if !matches!(self.current_token(), Some(Token::LParen)) {
@@ -469,12 +471,12 @@ impl<'a> Parser<'a> {
             ));
         }
         self.advance();
-        
+
         let mut args = Vec::new();
         if !matches!(self.current_token(), Some(Token::RParen)) {
             loop {
                 args.push(self.parse_expression()?);
-                
+
                 if self.consume(Token::Comma)? {
                     continue;
                 }
@@ -491,13 +493,13 @@ impl<'a> Parser<'a> {
         } else {
             self.advance(); // consume RParen
         }
-        
+
         Ok(Expr::UserFunctionCall {
             name: name.to_string(),
             args,
         })
     }
-    
+
     fn parse_function_call(&mut self, name: &str) -> Result<Expr, CompileError> {
         // Expect opening parenthesis
         if !matches!(self.current_token(), Some(Token::LParen)) {
@@ -509,7 +511,7 @@ impl<'a> Parser<'a> {
             ));
         }
         self.advance();
-        
+
         // Parse optional argument
         let arg = if matches!(self.current_token(), Some(Token::RParen)) {
             None
@@ -517,7 +519,7 @@ impl<'a> Parser<'a> {
             let expr = self.parse_expression()?;
             Some(Box::new(expr))
         };
-        
+
         // Expect closing parenthesis
         if !matches!(self.current_token(), Some(Token::RParen)) {
             return Err(CompileError::new(
@@ -528,23 +530,23 @@ impl<'a> Parser<'a> {
             ));
         }
         self.advance();
-        
+
         Ok(Expr::FunctionCall {
             name: name.to_string(),
             arg,
         })
     }
-    
+
     fn current_binary_op(&self) -> Option<(BinaryOp, u8)> {
         match self.current_token()? {
-            Token::Add => Some((BinaryOp::Add, 1)),         // 💀
+            Token::Add => Some((BinaryOp::Add, 1)),           // 💀
             Token::Subtract => Some((BinaryOp::Subtract, 1)), // 😭
             Token::Multiply => Some((BinaryOp::Multiply, 2)), // 😏
-            Token::Divide => Some((BinaryOp::Divide, 2)),   // 🚡
+            Token::Divide => Some((BinaryOp::Divide, 2)),     // 🚡
             _ => None,
         }
     }
-    
+
     fn consume(&mut self, expected: Token) -> Result<bool, CompileError> {
         if self.check(&expected) {
             self.advance();
@@ -553,27 +555,28 @@ impl<'a> Parser<'a> {
             Ok(false)
         }
     }
-    
+
     fn check(&self, expected: &Token) -> bool {
-        self.current_token().map_or(false, |t| std::mem::discriminant(t) == std::mem::discriminant(expected))
+        self.current_token().map_or(false, |t| {
+            std::mem::discriminant(t) == std::mem::discriminant(expected)
+        })
     }
-    
+
     fn current_token(&self) -> Option<&Token> {
         self.tokens.get(self.position)
     }
-    
+
     fn advance(&mut self) {
         if self.position < self.tokens.len() {
             self.position += 1;
         }
     }
-    
+
     fn get_line(&self) -> usize {
         1 // Simplified for now
     }
-    
+
     fn get_col(&self) -> usize {
         1 // Simplified for now
     }
 }
-
